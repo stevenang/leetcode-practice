@@ -30,7 +30,9 @@ jobs:
       
       - name: Run tests
         working-directory: python
-        run: pytest
+        env:
+          PYTHONPATH: .
+        run: pytest -v
   
   test_java:
     name: Test Java solutions
