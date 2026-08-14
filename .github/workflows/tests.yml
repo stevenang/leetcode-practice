@@ -68,7 +68,7 @@ jobs:
 
       - name: Run tests
         working-directory: go
-        run: go test ./...
+        run: go test -v ./...
   
   test_c:
     name: Test C solutions
