@@ -1,0 +1,50 @@
+{
+  "problem": {
+    "number": 1,
+    "slug": "two-sum",
+    "title": "Two Sum",
+    "difficulty": "Easy"
+  },
+  "cases": [
+    {
+      "name": "standard example",
+      "input": {
+        "nums": [2, 7, 11, 15],
+        "target": 9
+      },
+      "expected": [0, 1]
+    },
+    {
+      "name": "matching values in the middle",
+      "input": {
+        "nums": [3, 2, 4],
+        "target": 6
+      },
+      "expected": [1, 2]
+    },
+    {
+      "name": "duplicate values",
+      "input": {
+        "nums": [3, 3],
+        "target": 6
+      },
+      "expected": [0, 1]
+    },
+    {
+      "name": "negative numbers",
+      "input": {
+        "nums": [-3, 4, 3, 90],
+        "target": 0
+      },
+      "expected": [0, 2]
+    },
+    {
+      "name": "negative target",
+      "input": {
+        "nums": [-1, -2, -3, -4, -5],
+        "target": -8
+      },
+      "expected": [2, 4]
+    }
+  ]
+}

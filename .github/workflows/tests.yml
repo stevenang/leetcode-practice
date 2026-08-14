@@ -1,0 +1,118 @@
+name: Test solutions
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test_python:
+    name: Test Python solutions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.14
+          cache: pip
+      
+      - name: Install dependencies
+        working-directory: python
+        run: pip install -e ".[test]"
+      
+      - name: Run tests
+        working-directory: python
+        run: pytest
+  
+  test_java:
+    name: Test Java solutions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: gradle
+
+      - name: Compile Java code
+        run: javac -d out java/**/*.java
+
+      - name: Run tests
+        working-directory: java
+        run: ./gradlew test
+  
+  test_go:
+    name: Test Go solutions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go/go.mod
+          cache-dependency-path: go/go.sum
+
+      - name: Run tests
+        working-directory: go
+        run: go test ./...
+  
+  test_c:
+    name: Test C solutions
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Configure
+        working-directory: c
+        run: cmake -S . -B build
+
+      - name: Run tests
+        working-directory: c
+        run: ctest --test-dir build --output-on-failure
+
+  test_groovy:
+    name: Test Groovy solutions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Groovy
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: gradle
+
+      - name: Run tests
+        working-directory: groovy
+        run: ./gradlew test --no-daemon
+
+  scala:
+    name: Test Scala solutions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Scala
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: sbt
+
+      - name: Run tests
+        working-directory: scala
+        run: sbt test
