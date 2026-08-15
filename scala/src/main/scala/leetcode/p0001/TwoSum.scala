@@ -18,10 +18,12 @@ object TwoSum:
         val currentValue = nums(index)
         val complementValue = target - currentValue
 
-        complementIndexMap(complementValue) match
+        complementIndexMap.get(complementValue) match
             case Some(complementIndex) =>
                 return Array(complementIndex, index)
             case None =>
                 complementIndexMap(complementValue) = index
+
+        index += 1
 
     return Array.empty[Int]
