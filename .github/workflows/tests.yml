@@ -46,13 +46,10 @@ jobs:
           distribution: 'temurin'
           java-version: '25'
           cache: gradle
-
-      - name: Compile Java code
-        run: javac -d out java/**/*.java
-
+          
       - name: Run tests
         working-directory: java
-        run: ./gradlew test
+        run: ./gradlew :lib:test --no-daemon --rerun-tasks --console=plain
   
   test_go:
     name: Test Go solutions
