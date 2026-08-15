@@ -103,15 +103,22 @@ jobs:
     name: Test Scala solutions
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Check out repository
+        uses: actions/checkout@v6
 
-      - name: Set up Scala
+      - name: Set up Java
         uses: actions/setup-java@v5
         with:
-          distribution: 'temurin'
-          java-version: '25'
+          distribution: temurin
+          java-version: "25"
           cache: sbt
+          cache-dependency-path: |
+            scala/build.sbt
+            scala/project/build.properties
 
-      - name: Run tests
+      - name: Set up sbt
+        uses: sbt/setup-sbt@v1
+
+      - name: Run Scala tests
         working-directory: scala
-        run: sbt test
+        run: sbt -batch test
