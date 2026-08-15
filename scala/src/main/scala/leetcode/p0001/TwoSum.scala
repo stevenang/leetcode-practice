@@ -22,7 +22,7 @@ object TwoSum:
             case Some(complementIndex) =>
                 return Array(complementIndex, index)
             case None =>
-                complementIndexMap(complementValue) = index
+                complementIndexMap(currentValue) = index
 
         index += 1
 
