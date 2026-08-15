@@ -26,11 +26,13 @@ jobs:
       
       - name: Install dependencies
         working-directory: python
-        run: pip install -e ".[test]"
+        run: python -m pip install -r requirements.txt
       
       - name: Run tests
         working-directory: python
-        run: pytest
+        env:
+          PYTHONPATH: .
+        run: pytest -v
   
   test_java:
     name: Test Java solutions
@@ -44,13 +46,10 @@ jobs:
           distribution: 'temurin'
           java-version: '25'
           cache: gradle
-
-      - name: Compile Java code
-        run: javac -d out java/**/*.java
-
+          
       - name: Run tests
         working-directory: java
-        run: ./gradlew test
+        run: ./gradlew :lib:test --no-daemon --rerun-tasks --console=plain
   
   test_go:
     name: Test Go solutions
@@ -66,22 +65,32 @@ jobs:
 
       - name: Run tests
         working-directory: go
-        run: go test ./...
+        run: go test -v ./...
   
   test_c:
     name: Test C solutions
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Check out repository
+        uses: actions/checkout@v6
 
       - name: Configure
         working-directory: c
-        run: cmake -S . -B build
+        run: >
+          cmake 
+          -S . 
+          -B build 
+          -DCMAKE_C_COMPILER=gcc 
+          -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build C tests
+        working-directory: c
+        run: cmake --build build --target test_p0001_two_sum --verbose
 
       - name: Run tests
         working-directory: c
-        run: ctest --test-dir build --output-on-failure
+        run: ctest --test-dir build --build-config Debug --verbose
 
   test_groovy:
     name: Test Groovy solutions
@@ -98,21 +107,28 @@ jobs:
 
       - name: Run tests
         working-directory: groovy
-        run: ./gradlew test --no-daemon
+        run: ./gradlew test :lib:test --no-daemon --rerun-tasks --console=plain
 
   scala:
     name: Test Scala solutions
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Check out repository
+        uses: actions/checkout@v6
 
-      - name: Set up Scala
+      - name: Set up Java
         uses: actions/setup-java@v5
         with:
-          distribution: 'temurin'
-          java-version: '25'
+          distribution: temurin
+          java-version: "25"
           cache: sbt
+          cache-dependency-path: |
+            scala/build.sbt
+            scala/project/build.properties
 
-      - name: Run tests
+      - name: Set up sbt
+        uses: sbt/setup-sbt@v1
+
+      - name: Run Scala tests
         working-directory: scala
-        run: sbt test
+        run: sbt -batch test
