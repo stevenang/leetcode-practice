@@ -100,7 +100,7 @@ jobs:
 
       - name: Run tests
         working-directory: groovy
-        run: ./gradlew test --no-daemon --full-stacktrace --info
+        run: ./gradlew test --no-daemon --info
 
   scala:
     name: Test Scala solutions
