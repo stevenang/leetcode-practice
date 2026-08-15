@@ -12,13 +12,16 @@ object TwoSum:
    */
   def solution(nums: Array[Int], target: Int): Array[Int] =
     val complementIndexMap = mutable.Map.empty[Int, Int]
-    for ((value, index) <- nums.zipWithIndex) {
-        val complementValue = target - value
-        if (complementIndexMap.contains(complementValue)) {
-            return Array(complementIndexMap(complementValue), index)
-        } else {
-            complementIndexMap(value) = index
-        }
-    }
+    var index = 0
+
+    while index < nums.length do
+        val currentValue = nums(index)
+        val complementValue = target - currentValue
+
+        complementIndexMap(complementValue) match
+            case Some(complementIndex) =>
+                return Array(complementIndex, index)
+            case None =>
+                complementIndexMap(complementValue) = index
 
     return Array.empty[Int]
